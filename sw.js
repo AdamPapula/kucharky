@@ -3,11 +3,11 @@ console.log('Script loaded!')
 var cacheStorageKey = 'kucharky'
 
 var cacheList = [
-  '/',
-  "index.html",
-  "main.css",
-  "e.png",
-  "pwa-fonts.png"
+  '/kucharky/',
+  "/kucharky/index.html",
+  "/kucharky/main.css",
+  "/kucharky/e.png",
+  "/kucharky/pwa-fonts.png"
 ]
 
 self.addEventListener('install', function(e) {
