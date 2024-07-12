@@ -1,0 +1,40 @@
+<head>
+  <title>Vyhledávání v kuchařkách</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" type="text/css" href="css/main.css" />
+  <link rel="icon" href="image/icons-192.png" type="image/png" />
+  <meta charset="UTF-8" />
+  <script src="js/main.js"></script>
+</head>
+
+<body>
+  <h1>Vyhledávání v kuchařkách</h1>
+  <a href="new.html">Přidat nový recept</a>
+  <a href="settings.html">Nastavení</a>
+  <form>
+    <label for="search">Hledat recept:</label>
+    <input id="search" name="search" type="search" />
+  </form>
+  <div id="count" data-text="Celkem receptů:"></div>
+  <div id="recipes"></div>
+
+
+
+
+  <script type="text/javascript">
+    if (navigator.serviceWorker != null) {
+      navigator.serviceWorker.register("sw.js").then(function (registration) {
+        console.log("Registered events at scope: ", registration.scope);
+      });
+    }
+
+    fetch("./data.json");
+
+    var statusEl = document.querySelector("#network-status");
+    if (!navigator.onLine) {
+      statusEl.classList = ["is-offline"];
+      statusEl.innerText = "Offline";
+    }
+  </script>
+</body>

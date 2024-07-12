@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nový recept | Kuchařky</title>
+  </head>
+  <body>
+    <h1>Nový recept</h1>
+
+    <form id="recipeForm">
+      <label for="name">Název:</label>
+      <input type="text" id="name" name="name" required />
+
+      <br />
+
+      <label for="synonyms">Synonyma (oddělené čárkou):</label>
+      <input type="text" id="synonyms" name="synonyms" />
+
+      <br />
+
+      <label for="source">Zdroj receptu:</label>
+      <input type="text" id="source" name="source" />
+      <!-- pokud je postup nebo ingredience prázdný, vyžaduj zdroj receptu -->
+
+      <br />
+
+      <label for="page">Strana:</label>
+      <input type="number" id="page" name="page" min="1" />
+
+      <br />
+
+      <label for="time">Potřebný čas:</label>
+      <input type="number" id="time" name="time" min="1" />
+
+      <br />
+
+      <label for="servings">Počet porcí:</label>
+      <input type="number" id="servings" name="servings" min="1" />
+
+      <h3>Ingredience</h3>
+
+      <input
+        type="radio"
+        name="ingredients"
+        id="componentsRadio"
+        value="componentsContainer"
+      />
+      <label for="components">Komponenty</label>
+
+      <input
+        type="radio"
+        name="ingredients"
+        id="ingredientsRadio"
+        value="ingredientsContainer"
+        checked
+      />
+      <label for="ingredients">Ingredience</label>
+
+      <br />
+
+      <div id="componentsContainer" style="display: none">
+        <button type="button" onclick="addComponent()">
+          Přidat komponentu
+        </button>
+        <div id="components"></div>
+      </div>
+      <div id="ingredientsContainer">
+        <button type="button" onclick="addIngredient()">
+          Přidat ingredienci
+        </button>
+        <div id="ingredients"></div>
+      </div>
+
+      <br />
+
+      <label for="instructions">Postup:</label>
+      <textarea id="instructions" name="instructions" rows="5"></textarea>
+
+      <button type="submit">Přidat recept</button>
+    </form>
+
+    <script>
+      const radios = document.querySelectorAll('input[name="ingredients"]');
+      const componentsContainer = document.getElementById("componentsContainer");
+      const ingredientsContainer = document.getElementById("ingredientsContainer");
+
+      radios.forEach((radio) => {
+        radio.addEventListener("change", function () {
+          if (this.checked) {
+            const containers = {
+              componentsContainer: componentsContainer,
+              ingredientsContainer: ingredientsContainer,
+            };
+
+            for (const key in containers) {
+              containers[key].style.display =
+                this.value === key ? "block" : "none";
+            }
+          }
+        });
+      });
+    </script>
+    <script>
+      let componentIdCounter = 0;
+
+      function addComponent() {
+        componentIdCounter++;
+        const container = document.getElementById("components");
+        const componentId = `component${componentIdCounter}`;
+
+        const componentHTML = `
+        <div id="${componentId}">
+          <h4>Komponenta ${componentIdCounter}</h4>
+          <label for="${componentId}-name">Název:</label>
+          <input type="text" id="${componentId}-name" name="${componentId}-name">
+
+          <h5>Ingredience</h5>
+          <button type="button" onclick="addIngredient('${componentId}')">Přidat ingredienci</button>
+          <div id="${componentId}-ingredients">
+          </div>
+        </div>
+      `;
+
+        container.insertAdjacentHTML("beforeend", componentHTML);
+      }
+
+      function addIngredient(componentId) {
+
+        const ingredientsContainer = document.getElementById(
+          componentId ? `${componentId}-ingredients` : "ingredients"
+        );
+
+        console.log(ingredientsContainer);
+
+        const ingredientId = componentId? `${componentId}-ingredient${Date.now()}` : `ingredient${Date.now()}`;
+
+        const ingredientHTML = `
+        <div id="${ingredientId}">
+          <label for="${ingredientId}-name">Název:</label>
+          <input type="text" id="${ingredientId}-name" name="${ingredientId}-name">
+
+          <label for="${ingredientId}-amount">Množství:</label>
+          <input type="number" id="${ingredientId}-amount" name="${ingredientId}-amount" min="1">
+            
+          <label for="${ingredientId}-unit">Jednotka:</label>
+          <input type="text" id="${ingredientId}-unit" name="${ingredientId}-unit">
+
+          <label for="${ingredientId}-isMain">Hlavní surovina:</label>
+          <input type="checkbox" id="${ingredientId}-isMain" name="${ingredientId}-isMain">
+
+          <button type="button" onclick="removeIngredient('${ingredientId}')">Smazat</button>
+        </div>
+      `;
+
+        ingredientsContainer.insertAdjacentHTML("beforeend", ingredientHTML);
+      }
+
+      function removeIngredient(ingredientId) {
+        const ingredientElement = document.getElementById(ingredientId);
+        ingredientElement.parentNode.removeChild(ingredientElement);
+      }
+
+      const recipeForm = document.getElementById("recipeForm");
+
+
+      recipeForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const recipe = {
+          id: uuidv4(),
+          name: document.getElementById("name").value,
+          synonyms: document
+            .getElementById("synonyms")
+            .value.split(",")
+            .map((synonym) => synonym.trim()),
+          source: document.getElementById("source").value,
+          page: parseInt(document.getElementById("page").value),
+          time: parseInt(document.getElementById("time").value),
+          servings: parseInt(document.getElementById("servings").value),
+          components: [],
+          ingredients: [],
+          instructions: document
+            .getElementById("instructions")
+            .value.split("\n")
+            .filter((instruction) => instruction.trim() !== ""),
+        };
+
+        const selectIngredients = document.getElementById("ingredientsRadio").checked;
+        const selectComponents = document.getElementById("componentsRadio").checked;
+
+        if (selectComponents) {
+          const components = document.getElementById("components").children;
+
+          for (let i = 0; i < components.length; i++) {
+              console.log(components);
+            const component = components[i];
+            const componentName = document.getElementById(`${component.id}-name`).value;
+            const ingredientContainers = document.getElementById(`${component.id}-ingredients`).children;
+            const ingredients = [];
+
+            for (let j = 0; j < ingredientContainers.length; j++) {
+              const ingredientContainer = ingredientContainers[j];
+              const ingredientName = document.getElementById(`${ingredientContainer.id}-name`).value;
+
+              const ingredientAmount = document.getElementById(`${ingredientContainer.id}-amount`.value);
+              const ingredientUnit = document.getElementById(`${ingredientContainer.id}-unit`).value;
+              const isMain = document.getElementById(`${ingredientContainer.id}-isMain`).checked;
+
+              ingredients.push({
+                name: ingredientName,
+                quantity: {
+                  amount: ingredientAmount,
+                  unit: ingredientUnit,
+                },
+                isMain: isMain
+              });
+            }
+
+            recipe.components.push({
+               name: componentName,
+               ingredients: ingredients
+             });
+          }
+        
+        } 
+        
+        
+        
+        else if (selectIngredients) {
+            const ingredients = document.getElementById("ingredients").children;
+            for (let j = 0; j < ingredients.length; j++) {
+              const ingredientName = document.getElementById(`${ingredients[j].id}-name`).value;
+              const ingredientAmount = document.getElementById(`${ingredients[j].id}-amount`).value;
+              const ingredientUnit = document.getElementById(`${ingredients[j].id}-unit`).value;
+              const isMain = document.getElementById(`${ingredients[j].id}-isMain`).checked;
+
+              recipe.ingredients.push({
+                name: ingredientName,
+                quantity: {
+                    amount: ingredientAmount,
+                    unit: ingredientUnit
+                },
+                isMain: isMain
+              });
+            }
+
+        } else {
+            console.error("Chyba, nic není vybráno");
+        }
+
+        // TODO : kontrola jestli recept není jen název ale obsahuje ingredience nebo url nebo popis
+
+        let recepty = JSON.parse(localStorage.getItem('recepty')) || [];
+        recepty.push(recipe);
+        localStorage.setItem('recepty', JSON.stringify(recepty));
+        document.getElementById("recipeForm").reset();
+      });
+
+
+
+
+
+
+      // Function to generate UUID (v4)
+      function uuidv4() {
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+          /[xy]/g,
+          function (c) {
+            var r = (Math.random() * 16) | 0,
+              v = c == "x" ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+          }
+        );
+      }
+    </script>
+  </body>
+</html>
