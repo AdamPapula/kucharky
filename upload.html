@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nahrání nových receptů | Kuchařky</title>
+</head>
+<body>
+    <form id="jsonForm">
+        <label for="jsonFile">Vyberte JSON soubor:</label>
+        <input type="file" id="jsonFile" accept=".json">
+        <input type="submit" value="Nahrát">
+    </form>
+    
+    <script>
+        document.getElementById('jsonForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('jsonFile');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const json = JSON.parse(e.target.result);
+                        localStorage.setItem('recepty', JSON.stringify(json));
+                        alert('JSON úspěšně nahrán a uložen do localStorage.');
+                    } catch (error) {
+                        alert('Chyba při čtení JSON souboru: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Prosím, vyberte soubor.');
+            }
+        });
+    </script>
+
+</body>
+</html>
