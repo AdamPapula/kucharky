@@ -24,5 +24,12 @@
   "display": "standalone",
   "scope": "/",
   "theme_color": "#E64C3C",
-  "description": "Vyhledávání receptů v kuchařkách."
+  "description": "Vyhledávání receptů v kuchařkách.",
+  "shortcuts": [
+    {
+      "name": "Přidat nový recept",
+      "url": "/new.html",
+      "description": "Přidat nový recept do kuchařky."
+    }
+  ]
 }
