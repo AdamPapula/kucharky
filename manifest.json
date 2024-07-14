@@ -1,6 +1,6 @@
 {
-  "short_name": "Kuchařky",
-  "name": "Vyhledávání v kuchařkách",
+  "short_name": "Recepty",
+  "name": "Vyhledávání receptů",
   "icons": [
     {
       "src": "/kucharky/image/icons-vector.svg",
