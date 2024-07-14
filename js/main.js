@@ -12,9 +12,9 @@ function loadRecipesFromLocalStorage() {
     recipes.innerHTML = "";
 
     loaded.forEach((recipe) => {
-      const recipeDiv = document.createElement("div");
-      recipeDiv.classList.add("recipe");
-      recipeDiv.setAttribute(dataSynonyms, recipe.synonyms);
+      const recipeContainer = document.createElement("div");
+      recipeContainer.classList.add("recipe-container");
+      recipeContainer.setAttribute(dataSynonyms, recipe.synonyms);
 
       //vygeneruju hlavní ingredience
       let mainIngredients = [];
@@ -34,28 +34,31 @@ function loadRecipesFromLocalStorage() {
         });
       }
 
-      recipeDiv.setAttribute(dataMainIngredients, mainIngredients.toString());
-      recipeDiv.setAttribute(dataName, recipe.name);
+      recipeContainer.setAttribute(dataMainIngredients, mainIngredients.toString());
+      recipeContainer.setAttribute(dataName, recipe.name);
+
+      const recipeDiv = document.createElement("div");
+      recipeDiv.classList.add("recipe");
+
 
       // Vytvoření nadpisu pro název receptu
-      const recipeName = document.createElement("h3");
+      const recipeName = document.createElement("h2");
       recipeName.textContent = recipe.name;
       recipeDiv.appendChild(recipeName);
 
-      // Vytvoření odkazu s ID receptu
-      const detailLink = document.createElement("a");
-      detailLink.textContent = "Detail";
-      detailLink.href="#";
-      detailLink.setAttribute("data-action", "view")
-      detailLink.setAttribute("data-id", recipe.id);
-      recipeDiv.appendChild(detailLink);
+      // const detailLink = document.createElement("button");
+      // detailLink.textContent = "Detail";
+      // detailLink.type = "button";
+      // detailLink.setAttribute("data-action", "view")
+      // detailLink.setAttribute("data-id", recipe.id);
+      // recipeDiv.appendChild(detailLink);
 
-      const editLink = document.createElement("a");
-      editLink.textContent = "Upravit";
-            editLink.href="#";
-      editLink.setAttribute("data-action", "edit")
-      editLink.setAttribute("data-id", recipe.id); 
-      recipeDiv.appendChild(editLink);
+      // const editLink = document.createElement("button");
+      // editLink.textContent = "Upravit";
+      // editLink.type = "button";
+      // editLink.setAttribute("data-action", "edit")
+      // editLink.setAttribute("data-id", recipe.id);
+      // recipeDiv.appendChild(editLink);
 
       // Vytvoření elementu pro potřebný čas (součet preparation a cooking)
       const timeElement = document.createElement("p");
@@ -71,8 +74,10 @@ function loadRecipesFromLocalStorage() {
       pageElement.textContent = `Strana: ${recipe.page}`;
       recipeDiv.appendChild(pageElement);
 
+      recipeContainer.appendChild(recipeDiv);
+
       // Přidání receptu do hlavního divu
-      recipes.appendChild(recipeDiv);
+      recipes.appendChild(recipeContainer);
       recipesTotal++;
     });
     updateTotalRecipes(recipesTotal);
@@ -138,7 +143,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   //blokace odkazů
-  let links = document.querySelectorAll("a");
+  let links = document.querySelectorAll("button[type=button]");
   links.forEach(function (link) {
     link.addEventListener("click", function (event) {
       event.preventDefault();
@@ -153,4 +158,162 @@ document.addEventListener("DOMContentLoaded", (event) => {
       // atd.
     });
   });
+
+
+document.querySelectorAll(".recipe").forEach((recipeElement) => {
+  const xwiper = new Xwiper(recipeElement);
+  xwiper.onSwipeLeft(() => {console.log("swipe left");});
+  xwiper.onSwipeRight(() => console.log("swipe right"));
 });
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+const defaults = {
+  threshold: 50,
+  passive: false,
+};
+
+class Xwiper {
+  constructor(element, options = {}) {
+    this.options = { ...defaults, ...options };
+
+    this.element = null;
+    this.touchStartX = 0;
+    this.touchStartY = 0;
+    this.touchEndX = 0;
+    this.touchEndY = 0;
+    this.onSwipeLeftAgent = null;
+    this.onSwipeRightAgent = null;
+
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onTouchEnd = this.onTouchEnd.bind(this);
+    this.onTouchMove = this.onTouchMove.bind(this);
+    this.onSwipeLeft = this.onSwipeLeft.bind(this);
+    this.onSwipeRight = this.onSwipeRight.bind(this);
+    this.destroy = this.destroy.bind(this);
+    this.handleGesture = this.handleGesture.bind(this);
+
+    let eventOptions = this.options.passive ? { passive: true } : false;
+
+    this.element =
+      element instanceof EventTarget
+        ? element
+        : document.querySelector(element);
+
+    this.element.addEventListener("touchstart",this.onTouchStart,eventOptions);
+    this.element.addEventListener("touchmove", this.onTouchMove, eventOptions);
+    this.element.addEventListener("touchend", this.onTouchEnd, eventOptions);
+  }
+
+  onTouchStart(event) {
+    this.touchStartX = event.changedTouches[0].screenX;
+    this.touchStartY = event.changedTouches[0].screenY;
+    this.element.classList.add("drag");
+  }
+  
+  onTouchMove(event) {
+    const touch = event.changedTouches[0];
+    const deltaX = touch.screenX - this.touchStartX;
+    const deltaY = touch.screenY - this.touchStartY;
+
+    // Check if the movement is predominantly horizontal or vertical
+    if (Math.abs(deltaX) > 1.25* Math.abs(deltaY)) {
+      // Horizontal swipe detected
+      // const leftPosition = -1 * deltaX;
+      this.element.style.top = "0";
+      this.element.style.left = `${deltaX}px`;
+
+      let parent = this.element.parentElement;
+      let addClass = deltaX > 0 ? "delete" : "edit";
+      let removeClass = deltaX > 0 ? "edit" : "delete";
+      parent.classList.add(addClass);
+      parent.classList.remove(removeClass);
+    }
+  }
+  
+  onTouchEnd(event) {
+    let parent = this.element.parentElement;
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.touchEndY = event.changedTouches[0].screenY;
+    this.moveToOriginalPosition(() => {
+      parent.classList.remove("edit", "delete");
+      this.element.classList.remove("drag");
+    });
+    if (Math.abs(parseInt(window.getComputedStyle(this.element).left, 10)) > window.screen.width/3) {
+      this.handleGesture();
+    } 
+  }
+
+  onSwipeLeft(func) {
+    this.onSwipeLeftAgent = func;
+  }
+  onSwipeRight(func) {
+    this.onSwipeRightAgent = func;
+  }
+
+  destroy() {
+    this.element.removeEventListener("touchstart", this.onTouchStart);
+    this.element.removeEventListener("touchend", this.onTouchEnd);
+  }
+
+  handleGesture() {
+    /**
+     * swiped left
+     */
+    if (this.touchEndX + this.options.threshold <= this.touchStartX) {
+      this.onSwipeLeftAgent && this.onSwipeLeftAgent();
+      return "swiped left";
+    }
+
+    /**
+     * swiped right
+     */
+    if (this.touchEndX - this.options.threshold >= this.touchStartX) {
+      this.onSwipeRightAgent && this.onSwipeRightAgent();
+      return "swiped right";
+    }
+  }
+
+  moveToOriginalPosition(callback) {
+    const currentLeft = parseInt(window.getComputedStyle(this.element).left, 10);
+    const distance = currentLeft;
+    const duration = Math.abs(distance) * 0.5;
+    
+    let object = this.element;
+    let start = null;
+
+    function step(timestamp) {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+        const progressRatio = Math.min(progress / duration, 1);
+
+        object.style.left = currentLeft - distance * progressRatio + "px";
+
+        if (progress < duration) {
+          requestAnimationFrame(step);
+        } else if (callback && typeof callback === "function") {
+          callback();
+        }
+    }
+
+    requestAnimationFrame(step);
+}
+
+}
+

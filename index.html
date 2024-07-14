@@ -1,5 +1,5 @@
 <head>
-  <title>Vyhledávání v kuchařkách</title>
+  <title>Recepty</title>
   <meta name="viewport" content="width=device-width, user-scalable=no" />
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" type="text/css" href="css/main.css" />
@@ -9,10 +9,12 @@
 </head>
 
 <body>
-  <h1>Vyhledávání v kuchařkách</h1>
+  <header>
+    <img src="image/cookbook.min.svg" alt="Logo"> <h1>Recepty</h1>
+  </header>
   <a href="new.html">Přidat nový recept</a>
   <a href="settings.html">Nastavení</a>
-  <form>
+  <form id="target">
     <label for="search">Hledat recept:</label>
     <input id="search" name="search" type="search" />
   </form>
@@ -20,7 +22,26 @@
   <div id="recipes"></div>
 
 
+  <div class="fab">
+    <button class="main">
+      <img src="icon/pen.svg" alt="menu">
+    </button>
+    <ul>
+      <li>
+        <label for="menu-1">Nastavení</label>
+        <button id="menu-1"><img src="icon/settings.svg" alt="nastavení"></button>
+      </li>
+      <li>
+        <label for="menu-2">Přidat nový</label>
+        <button id="menu-2"><img src="icon/plus.svg" alt="přidat nový"></button>
+      </li>
+    </ul>
+  </div>
 
+
+  <footer>
+    kopyrájt
+  </footer>
 
   <script type="text/javascript">
     if (navigator.serviceWorker != null) {

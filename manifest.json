@@ -18,8 +18,8 @@
       "sizes": "192x192"
     }
   ],
-  "id": "/?source=pwa",
-  "start_url": "/kucharky/?source=pwa",
+  "id": "/kucharky/",
+  "start_url": "/kucharky/",
   "background_color": "#FFFFFF",
   "display": "standalone",
   "scope": "/",
@@ -28,8 +28,9 @@
   "shortcuts": [
     {
       "name": "Přidat nový recept",
-      "url": "/new.html",
-      "description": "Přidat nový recept do kuchařky."
+      "url": "/kucharky/new.html",
+      "description": "Přidat nový recept do kuchařky.",
+      "icons": [{ "src": "/kucharky/icon/plus.png", "sizes": "192x192" }]
     }
   ]
 }
