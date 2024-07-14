@@ -12,15 +12,28 @@
   <header>
     <img src="image/cookbook.min.svg" alt="Logo"> <h1>Recepty</h1>
   </header>
-  <a href="new.html">Přidat nový recept</a>
-  <a href="settings.html">Nastavení</a>
-  <form id="target">
-    <label for="search">Hledat recept:</label>
-    <input id="search" name="search" type="search" />
-  </form>
-  <div id="count" data-text="Celkem receptů:"></div>
-  <div id="recipes"></div>
+  <main>
+    <div class="search-filter">
+      <form id="target">
+        <div class="search-box">
+          <svg aria-hidden="true" class="icon-search" width="40" height="40" viewBox="0 0 18 18">
+            <path d="m18 16.5-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0Z"></path>
+          </svg>
+          <input id="search" name="search" type="search" />
+        </div>
+        
+        <label for="select-favorite" class="checkboxContainer">
+          Pouze oblíbené
+          <input type="checkbox" id="select-favorite" /> 
+          <span class="checkmark"></span>
+        </label> 
 
+      </form>
+      
+    </div>
+    <div id="count" data-text="Celkem receptů:"></div>
+    <div id="recipes"></div>
+  </main>
 
   <div class="fab">
     <button class="main">
@@ -29,11 +42,11 @@
     <ul>
       <li>
         <label for="menu-1">Nastavení</label>
-        <button id="menu-1"><img src="icon/settings.svg" alt="nastavení"></button>
+        <button id="menu-1" type="button" data-action="settings"><img src="icon/settings.svg" alt="nastavení"></button>
       </li>
       <li>
         <label for="menu-2">Přidat nový</label>
-        <button id="menu-2"><img src="icon/plus.svg" alt="přidat nový"></button>
+        <button id="menu-2" type="button" data-action="new"><img src="icon/plus.svg" alt="přidat nový"></button>
       </li>
     </ul>
   </div>
@@ -48,14 +61,6 @@
       navigator.serviceWorker.register("sw.js").then(function (registration) {
         console.log("Registered events at scope: ", registration.scope);
       });
-    }
-
-    fetch("./data.json");
-
-    var statusEl = document.querySelector("#network-status");
-    if (!navigator.onLine) {
-      statusEl.classList = ["is-offline"];
-      statusEl.innerText = "Offline";
     }
   </script>
 </body>

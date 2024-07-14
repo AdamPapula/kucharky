@@ -22,7 +22,7 @@
                 reader.onload = function(e) {
                     try {
                         const json = JSON.parse(e.target.result);
-                        localStorage.setItem('recepty', JSON.stringify(json));
+                        localStorage.setItem('recipes', JSON.stringify(json));
                         alert('JSON úspěšně nahrán a uložen do localStorage.');
                     } catch (error) {
                         alert('Chyba při čtení JSON souboru: ' + error.message);

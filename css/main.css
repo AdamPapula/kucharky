@@ -2,17 +2,23 @@
 	box-sizing: border-box;
 }
 :root {
-  --background-color: #ECF0F1;
+  --background-color: #ffffff;
   --text-color: #212121;
   --main-color: #E64C3C;
   --main-dark-color: #C03A2B;
   --header-color: #D1D4D1;
+  --fab-background: #FFFFFF;
+  --favorite-color: #ECF0F1;
+  --edit-color: #0a7e0a;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background-color: #111;
+    --header-color: #211f1f;
+    --background-color: #2f2c2c;
     --text-color: #EDEDED;
+    --fab-background: #4f4f4f;
+    --favorite-color: #4f4f4f;
   }
 }
 
@@ -49,6 +55,111 @@ body{
   font-family: sans-serif;
 }
 
+.search-filter {
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.search-filter form {
+  margin-bottom: 0;
+}
+
+
+
+.search-box {
+  width: 100%;
+  border: 1px solid var(--text-color);
+  overflow: hidden;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+.search-box .icon-search {
+  width: 50px;
+  height: 25px;
+  flex: 1 0 auto;
+}
+.search-box .icon-search path {
+  fill: var(--text-color);
+}
+.search-box input[type=search] {
+  font-size: 1em;
+  padding: 5px 10px;
+  border: 0;
+  outline: 0;
+  height: 48px;
+  width: calc(100% - 40px);
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+
+.checkboxContainer {
+  display: block;
+  position: relative;
+  padding-left: 40px;
+  cursor: pointer;
+  user-select: none;
+  height: 50px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+.checkboxContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  height: 30px;
+  width: 30px;
+  background-color: white;
+}
+
+.checkboxContainer input:checked ~ .checkmark {
+  background-color: var(--main-color);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkboxContainer input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkboxContainer .checkmark:after {
+  left: 10px;
+  top: 3px;
+  width: 6px;
+  height: 16px;
+  border: solid white;
+  border-width: 0 4px 4px 0;
+  transform: rotate(45deg);
+}
+
+
+#count {
+  font-size: .75em;
+  padding: 5px 15px;
+}
+
+
+
+
+
 .fab{
   position: fixed;
   bottom:10px;
@@ -65,7 +176,7 @@ body{
   border: none;
   box-shadow: 0 1px 5px rgba(0,0,0,.4);
   font-size: 24px;
-  color: white;
+  color: var(--fab-background);
   padding: 0;
   -webkit-transition: .2s ease-out;
   -moz-transition: .2s ease-out;
@@ -92,7 +203,6 @@ body{
   height: 25px;
 }
 
-
 .fab ul{
   position:absolute;
   bottom: 0;
@@ -102,21 +212,16 @@ body{
   margin:0;
   list-style:none;
   z-index:10;
-  
-  -webkit-transition: .2s ease-out;
-  -moz-transition: .2s ease-out;
   transition: .2s ease-out;
 }
 
 .fab ul li{
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   position: relative;
   margin-bottom: -10%;
   opacity: 0;
-  
-  -webkit-transition: .3s ease-out;
-  -moz-transition: .3s ease-out;
   transition: .3s ease-out;
 }
 
@@ -124,18 +229,13 @@ body{
   margin-right:10px;
   white-space: nowrap;
   display: block;
-  margin-top: 10px;
-  padding: 5px 8px;
-  background-color: white;
+  background-color: var(--fab-background);
   box-shadow: 0 1px 3px rgba(0,0,0,.2);
   border-radius:3px;
-  height: 18px;
-  font-size: 16px;
+  font-size: .9em;
+  padding: 5px;
   pointer-events: none;
   opacity:0;
-  
-  -webkit-transition: .2s ease-out;
-  -moz-transition: .2s ease-out;
   transition: .2s ease-out;
 }
 
@@ -169,51 +269,90 @@ body{
 
 #recipes h2 {
   margin: 0;
-  font-size: 1.3em;
+  font-size: 1.35em;
 }
 #recipes p {
   margin: 0;
 }
 
-
 .recipe-container {
   position: relative;
-  height: 144px;
-  border-bottom: 1px solid var(--header-color);
+  height: 130px;
 }
 .recipe-container:last-of-type {
   border-bottom: none;
 }
 .recipe-container.edit {
-  background-color: green;
+  background-color: var(--edit-color);
   background-image: url('../icon/pen.svg');
   background-position: center right 20px;
-  background-size: 40px 40px;
+  background-size: 30px 30px;
   background-repeat: no-repeat;
 
 }
 
-.recipe-container.delete {
-  background-color: red;
-  background-image: url('../icon/trash.svg');
+.recipe-container.not-favorite,  
+.recipe-container.favorite  {
+  background-color: var(--favorite-color);
   background-position: center left 20px;
-  background-size: 40px 40px;
+  background-size: 30px 30px;
   background-repeat: no-repeat;
+}
 
+.recipe-container.not-favorite {
+  background-image: url('../icon/heart-empty.svg');
+}
 
+.recipe-container.favorite {
+  background-image: url('../icon/heart.svg');
 }
 
 .recipe {
   position: absolute;
   z-index: 1;
-  padding: 20px;
+  padding: 15px;
   width: 100%;
-  height: 144px;
+  height: 130px;
   background-color: var(--background-color);
   transition: box-shadow .1s linear;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.recipe .details {
+  display: flex;
+  gap: 40px;
+}
+.recipe svg {
+  height: 24px;
+  display: inline-block;
+  vertical-align: bottom;
+  fill: var(--text-color);
 }
 .recipe.drag {
-  box-shadow: 0px 0px 5px 0px #000000;
+  box-shadow: 0 3px 8px rgba(0,0,0,.5);
   transition: box-shadow .1s linear;
   z-index: 4;
+}
+.recipe .favorite {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  top: 0;
+  right: 0;
+}
+.recipe-container[data-favorite="true"]:has(.recipe .favorite) .favorite {
+  display: block;
+}
+
+.recipe-container[data-favorite="false"]:has(.recipe .favorite) .favorite {
+  display: none;
+}
+
+
+footer {
+  padding: 15px;
+  text-align: center;
+  font-size: 0.75em;
 }
