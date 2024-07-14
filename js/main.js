@@ -160,11 +160,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
 
 
-document.querySelectorAll(".recipe").forEach((recipeElement) => {
-  const xwiper = new Xwiper(recipeElement);
-  xwiper.onSwipeLeft(() => {console.log("swipe left");});
-  xwiper.onSwipeRight(() => console.log("swipe right"));
-});
+  document.querySelectorAll(".recipe").forEach((recipeElement) => {
+    const xwiper = new Xwiper(recipeElement);
+    xwiper.onSwipeLeft(() => {console.log("swipe left");});
+    xwiper.onSwipeRight(() => console.log("swipe right"));
+  });
 
 
 
@@ -200,6 +200,7 @@ class Xwiper {
     this.touchEndY = 0;
     this.onSwipeLeftAgent = null;
     this.onSwipeRightAgent = null;
+    this.dragging = false;
 
     this.onTouchStart = this.onTouchStart.bind(this);
     this.onTouchEnd = this.onTouchEnd.bind(this);
@@ -224,7 +225,6 @@ class Xwiper {
   onTouchStart(event) {
     this.touchStartX = event.changedTouches[0].screenX;
     this.touchStartY = event.changedTouches[0].screenY;
-    this.element.classList.add("drag");
   }
   
   onTouchMove(event) {
@@ -233,9 +233,12 @@ class Xwiper {
     const deltaY = touch.screenY - this.touchStartY;
 
     // Check if the movement is predominantly horizontal or vertical
-    if (Math.abs(deltaX) > 1.25* Math.abs(deltaY)) {
-      // Horizontal swipe detected
-      // const leftPosition = -1 * deltaX;
+    if (Math.abs(deltaX) > 2 * Math.abs(deltaY) && !this.dragging) {
+      this.dragging = true;
+    }
+    if(this.dragging) {
+      this.element.classList.add("drag");
+
       this.element.style.top = "0";
       this.element.style.left = `${deltaX}px`;
 
@@ -248,6 +251,7 @@ class Xwiper {
   }
   
   onTouchEnd(event) {
+    this.dragging = false;
     let parent = this.element.parentElement;
     this.touchEndX = event.changedTouches[0].screenX;
     this.touchEndY = event.changedTouches[0].screenY;
