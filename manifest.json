@@ -3,34 +3,34 @@
   "name": "Vyhledávání receptů",
   "icons": [
     {
-      "src": "/kucharky/image/icons-vector.svg",
+      "src": "/recepty/image/icons-vector.svg",
       "type": "image/svg+xml",
       "sizes": "512x512"
     },
     {
-      "src": "/kucharky/image/icons-512.png",
+      "src": "/recepty/image/icons-512.png",
       "type": "image/png",
       "sizes": "512x512"
     },
     {
-      "src": "/kucharky/image/icons-192.png",
+      "src": "/recepty/image/icons-192.png",
       "type": "image/png",
       "sizes": "192x192"
     }
   ],
-  "id": "/kucharky/",
-  "start_url": "/kucharky/",
+  "id": "/recepty/",
+  "start_url": "/recepty/",
   "background_color": "#FFFFFF",
   "display": "standalone",
   "scope": "/",
   "theme_color": "#E64C3C",
-  "description": "Vyhledávání receptů v kuchařkách.",
+  "description": "Aplikace vám umožní snadno shromažďovat a organizovat vaše oblíbené recepty na jednom místě.",
   "shortcuts": [
     {
       "name": "Přidat nový recept",
-      "url": "/kucharky/new.html",
-      "description": "Přidat nový recept do kuchařky.",
-      "icons": [{ "src": "/kucharky/icon/plus.png", "sizes": "192x192" }]
+      "url": "/recepty/new.html",
+      "description": "Přidat nový recept.",
+      "icons": [{ "src": "/recepty/icon/plus.png", "sizes": "192x192" }]
     }
   ]
 }

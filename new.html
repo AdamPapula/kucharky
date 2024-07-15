@@ -12,80 +12,85 @@
   <header>
     <img src="image/cookbook.min.svg" alt="Logo"> <h1>Recepty</h1>
   </header>
+  <main class="container">
 
-  <h1>Nový recept</h1>
 
-    <form id="recipeForm">
-      <label for="name">Název:</label>
-      <input type="text" id="name" name="name" required />
-
-      <br />
-
-      <label for="synonyms">Synonyma (oddělené čárkou):</label>
-      <input type="text" id="synonyms" name="synonyms" />
-
-      <br />
-
-      <label for="source">Zdroj receptu:</label>
-      <input type="text" id="source" name="source" />
-      <!-- pokud je postup nebo ingredience prázdný, vyžaduj zdroj receptu -->
-
-      <br />
-
-      <label for="page">Strana:</label>
-      <input type="number" id="page" name="page" min="1" />
-
-      <br />
-
-      <label for="time">Potřebný čas:</label>
-      <input type="number" id="time" name="time" min="1" />
-
-      <br />
-
-      <label for="servings">Počet porcí:</label>
-      <input type="number" id="servings" name="servings" min="1" />
-
-      <h3>Ingredience</h3>
-
-      <input
-        type="radio"
-        name="ingredients"
-        id="componentsRadio"
-        value="componentsContainer"
-      />
-      <label for="components">Komponenty</label>
-
-      <input
-        type="radio"
-        name="ingredients"
-        id="ingredientsRadio"
-        value="ingredientsContainer"
-        checked
-      />
-      <label for="ingredients">Ingredience</label>
-
-      <br />
-
-      <div id="componentsContainer" style="display: none">
-        <button type="button" onclick="addComponent()">
-          Přidat komponentu
-        </button>
-        <div id="components"></div>
-      </div>
-      <div id="ingredientsContainer">
-        <button type="button" onclick="addIngredient()">
-          Přidat ingredienci
-        </button>
-        <div id="ingredients"></div>
-      </div>
-
-      <br />
-
-      <label for="instructions">Postup:</label>
-      <textarea id="instructions" name="instructions" rows="5"></textarea>
-
-      <button type="submit">Přidat recept</button>
-    </form>
+    <h1>Nový recept</h1>
+  
+      <form id="recipeForm">
+        <div class="row">
+          <label for="name">Název:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+  
+        <div class="row">
+          <label for="synonyms">Synonyma (oddělené čárkou):</label>
+          <input type="text" id="synonyms" name="synonyms" />
+        </div>
+  
+        <div class="row">
+          <label for="source">Zdroj receptu:</label>
+          <input type="text" id="source" name="source" />
+          <!-- pokud je postup nebo ingredience prázdný, vyžaduj zdroj receptu -->
+        </div>
+        
+        <div class="row">
+          <label for="page">Strana:</label>
+          <input type="number" id="page" name="page" min="1" />
+        </div>
+        
+        <div class="row">
+          <label for="time">Potřebný čas:</label>
+          <input type="number" id="time" name="time" min="1" />
+        </div>
+        
+        <div class="row">
+          <label for="servings">Počet porcí:</label>
+          <input type="number" id="servings" name="servings" min="1" />
+        </div>
+        
+        <h3>Ingredience</h3>
+  
+        <input
+          type="radio"
+          name="ingredients"
+          id="componentsRadio"
+          value="componentsContainer"
+        />
+        <label for="components">Komponenty</label>
+  
+        <input
+          type="radio"
+          name="ingredients"
+          id="ingredientsRadio"
+          value="ingredientsContainer"
+          checked
+        />
+        <label for="ingredients">Ingredience</label>
+  
+        <br />
+  
+        <div id="componentsContainer" style="display: none">
+          <button type="button" onclick="addComponent()">
+            Přidat komponentu
+          </button>
+          <div id="components"></div>
+        </div>
+        <div id="ingredientsContainer">
+          <button type="button" onclick="addIngredient()">
+            Přidat ingredienci
+          </button>
+          <div id="ingredients"></div>
+        </div>
+  
+        <br />
+  
+        <label for="instructions">Postup:</label>
+        <textarea id="instructions" name="instructions" rows="5"></textarea>
+  
+        <button type="submit">Přidat recept</button>
+      </form>
+  </main>
 
     <script>
       const radios = document.querySelectorAll('input[name="ingredients"]');
